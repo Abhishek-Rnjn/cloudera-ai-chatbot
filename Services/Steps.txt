@@ -3,5 +3,5 @@
 3. Document Parsing & Chunking (Manas + Kousani/ Mihir)
 4. Embedding the Chunks and intializing the DB (Abhishek)
 5. Setting up the RAG pipeline with DB & Llama3 (Abhishek + Mihir)
-6. Add Guardrails (TBD)
+6. Add Guardrails (TBD)p
 7. E2E with Testing (Team)
