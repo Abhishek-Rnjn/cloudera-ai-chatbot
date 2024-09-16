@@ -5,7 +5,7 @@ OPENAI_API_KEY = "eyJraWQiOiJjMDBjNmRlNGE1MjIyYTk1IiwidHlwIjoiSldUIiwiYWxnIjoiUl
 OPENAI_API_BASE = "https://ml-cb4a4d8b-dea.env-hack.svbr-nqvp.int.cldr.work/namespaces/serving-default/endpoints/llama-3-1-70b/v1"
 OPENAI_MODEL_NAME = "6lbx-oajq-2ehb-irio"
 
-http_client = httpx.Client()
+http_client = httpx.Client(verify=False)
 client = OpenAI(
     base_url=OPENAI_API_BASE,
     api_key=OPENAI_API_KEY,
