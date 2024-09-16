@@ -25,11 +25,7 @@ def predict(message, history=None):
     response = client.chat.completions.create(
         model=OPENAI_MODEL_NAME,
         messages=history_openai_format,
-        stream=True,
+        stream=False,
     )
+    return response
 
-    partial_message = ""
-    for chunk in response:
-        if chunk.choices[0].delta.content is not None:
-            partial_message = partial_message + chunk.choices[0].delta.content
-            yield partial_message

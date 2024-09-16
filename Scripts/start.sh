@@ -1,2 +1,2 @@
 echo "Starting up fastapi application..."
-uvicorn main:app
+uvicorn main:app --reload

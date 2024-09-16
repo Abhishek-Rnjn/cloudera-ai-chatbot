@@ -12,3 +12,4 @@ def health_check():
 @app.get("/chat")
 def chat_with_model(input: str):
     return predict(input)
+
