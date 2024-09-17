@@ -1,7 +1,7 @@
 from langchain_core.documents import Document
 from typing import List
 #from src.Services.RAG.retriever import BasicRetriever
-from listGoogleDrive import create_documents
+from src.Services.Chunker.listGoogleDrive import create_documents
 
 class Parser:
     #def __init__(self):
