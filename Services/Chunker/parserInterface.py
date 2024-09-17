@@ -8,9 +8,9 @@ from llama_index.core import SimpleDirectoryReader
 LLAMA_CLOUD_API_KEY = "lx-diyfyTqzC3G46rc8LLywzn7UfoFBJQIBlht6UyBnfgH3dFH1"
 #load_dotenv()
 
-pdfparser = LlamaParse(api_key= LLAMA_CLOUD_API_KEY, result_type="markdown")
-file_extractor = {".pdf": pdfparser}
-googleDriveLoader = GoogleDriveReader()
+#pdfparser = LlamaParse(api_key= LLAMA_CLOUD_API_KEY, result_type="markdown")
+#file_extractor = {".pdf": pdfparser}
+
 
 class ParserInterface:
     def parseSingleDoc(self):
@@ -18,10 +18,16 @@ class ParserInterface:
         logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
         filePath = os.path.join(os.getcwd(), 'temp_files/processed_chunks/Kubernetes.pdf')
         print(filePath)
-        documents = SimpleDirectoryReader(input_files=[filePath], file_extractor=file_extractor).load_data()
-        documents.append(googleDriveLoader.load_data(file_ids=["1KLmtJT7_pWwSykW8J0Dl3foyGI7RkXEoAYsG08siNGw"]))
+        #documents = SimpleDirectoryReader(input_files=[filePath], file_extractor=file_extractor).load_data()
+        googleDriveLoader = GoogleDriveReader("credentials_desktop.json")
+        googleDocs = googleDriveLoader.load_data(file_ids=["1KLmtJT7_pWwSykW8J0Dl3foyGI7RkXEoAYsG08siNGw"], )
+        documents = googleDocs
         print(documents[0].doc_id)
         return documents[0].doc_id
     
     def convertParsedStringJsonl():
         pass
+
+if __name__ == "__main__":
+    a = ParserInterface()
+    print(a.parseSingleDoc())

@@ -17,3 +17,8 @@ llama-parse
 llama-index-readers-file
 python-dotenv
 llama-index-readers-google==0.4.0
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+langchain-google-community[drive]
+google-api-python-client-stubs
