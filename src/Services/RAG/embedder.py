@@ -3,7 +3,7 @@ from langchain_core.embeddings import Embeddings
 from typing import List
 import requests
 import json
-from CONSTS import EMBEDDING_ENDPOINT, OPENAI_API_KEY
+from src.Services.RAG.CONSTS import EMBEDDING_ENDPOINT, OPENAI_API_KEY
 
 class CAIIEmbeddings(Embeddings):
     def __init__(self):
@@ -23,7 +23,6 @@ class CAIIEmbeddings(Embeddings):
             "input_type": "query"
             })
         response = requests.request("POST", self.url, headers=self.headers, data=payload, verify=False)
-        print(response)
         data = response.json()['data']
         all_embeddings = [0] * len(sentences)
         for embedding in data:
