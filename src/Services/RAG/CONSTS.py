@@ -8,4 +8,7 @@ OPENAI_API_BASE = ("https://ml-cb4a4d8b-dea.env-hack.svbr-nqvp.int.cldr.work/nam
                    "/llama-3-1-70b/v1")
 OPENAI_MODEL_NAME = "6lbx-oajq-2ehb-irio"
 SLACK_KEY="xoxb-7721231465447-7735843686306-BN7lrU5kmwFAIjv0tD9t81vS"
+PERSIST_DIRECTORY = "db"
+DEFAULT_FILE = "https://docs.cloudera.com/machine-learning/cloud/product/topics/ml-product-overview.html#cdsw_overview"
+IDS_PATH = r"helper_folder/ids.pkl"
 

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, Form, Request, UploadFile, File
+from fastapi import FastAPI, Response, Form, Request, UploadFile, File, HTTPException
 from threading import Thread
 import ssl
 import urllib.request
@@ -45,9 +45,11 @@ def initialize_application(initialize_vector_store: InitializeVectorStore):
     # Initialize the application with the provided pdf links and google drive link
     # Implement the logic to initialize the application using the provided links
     # need to make this asynchronous and add a status check. @praneet/ @mihir
-    driver.initailize_db(initialize_vector_store.pdf_links, initialize_vector_store.google_drive_link)
-    return {"message": "Application initialized successfully"}
-
+    try:
+        driver.initailize_db(initialize_vector_store.pdf_links, initialize_vector_store.google_drive_link)
+        return {"message": "Application initialized successfully"}
+    except Exception as e:
+        raise HTTPException(400, {"message": f"Error initializing application: {str(e)}"})
 
 @app.post("/v1/upload_file")
 def upload_pdf(file: UploadFile = File(...)):

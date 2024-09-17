@@ -14,22 +14,29 @@ from slack_sdk.errors import SlackApiError
 from src.Services.api_caller import predict
 from utils.CONSTS import SLACK_KEY
 from src.Services.api_caller import predict
+from src.Services.RAG.CONSTS import DEFAULT_FILE
+
+retriever = BasicRetriever()
 
 class Driver:
     def __init__(self):
         self.retriever =None
-        self.llm = None
+        self.llm = CustomOpenAIWrapper()
         self.parser = Parser()
+        self.__initialized = False
 
 
     def initailize_db(self, links : List[str], drive_link = None) -> None:
+        if self.__initialized is True:
+            raise Exception("Driver is already initialized, Please upload new docs using the upload APIs")
         links = [l for l in links if l != "string"]
+        if len(links) == 0:
+            links = [DEFAULT_FILE]
         print(f"The links are \n{links}\n")
-        retriever = BasicRetriever()
         docs = retriever.web_doc_loader(links)
         splits = retriever.text_splitter(docs)
-        self.retriever = retriever.get_retriever(splits)
-        self.llm = CustomOpenAIWrapper()
+        self.retriever = retriever.get_retriever(splits, True)
+        self.__initialized = True
 
     def store_pdf(self, file):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -63,7 +70,7 @@ class Driver:
 
         Question: {question}
         """
-
+        self.retriever = retriever.fetch_latest_retriever()
         prompt = ChatPromptTemplate.from_template(template)
         print(f"The prompt template is {prompt}")
         chain = {"context": self.retriever, "question": RunnablePassthrough()} | prompt | self.llm | StrOutputParser()
