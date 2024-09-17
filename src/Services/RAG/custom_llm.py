@@ -24,7 +24,7 @@ class CustomOpenAIWrapper(LLM):
             history_openai_format.append({"role": "user", "content": human})
             history_openai_format.append({"role": "assistant", "content": assistant})
         history_openai_format.append({"role": "user", "content": message})
-
+        print(f"The input to LLM is \n {history_openai_format}\n\n")
         response = api_client.chat.completions.create(
             model=OPENAI_MODEL_NAME,
             messages=history_openai_format,
