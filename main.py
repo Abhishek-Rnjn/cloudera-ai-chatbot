@@ -1,10 +1,29 @@
-from fastapi import FastAPI
-from src.Services.api_caller import predict
-from src.Models.initialize_model import InitializeVectorStore
-from src.Services.driver import Driver
-
+from fastapi import FastAPI, Response, Form, Request
+from threading import Thread
+import ssl
+import urllib.request
+from fastapi.responses import PlainTextResponse
+import threading
+from src.utils.slack_utils import process_message
+ssl._create_default_https_context = ssl._create_unverified_context
 app = FastAPI()
 driver = Driver()  # Initialize the Driver class to interact with the retriever and LLM
+
+@app.post("/ask")
+async def handle_slack_command(
+    request: Request,
+    channel_id: str = Form(...),
+    text: str = Form(...),
+    user_id: str = Form(...),
+):
+    # process as slack need resp in 3 seconds
+    response = PlainTextResponse(content="Processing ... ")
+
+    # using thread......... to do things in background
+    thread = threading.Thread(target=process_message, args=(channel_id, user_id, text))
+    thread.start()
+
+    return response
 
 
 @app.get("/")
