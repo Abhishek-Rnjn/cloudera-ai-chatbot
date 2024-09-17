@@ -9,3 +9,6 @@ llama-parse
 llama-index-readers-file
 python-dotenv
 llama-index-readers-google==0.4.0
+langchain
+langchain-community==0.3.0
+chromadb
