@@ -24,7 +24,7 @@ class BasicRetriever:
         return docs
     
     def text_splitter(self, docs: List[Document]) -> List[Document]:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=500)
         splits = text_splitter.split_documents(docs)
         return splits
     

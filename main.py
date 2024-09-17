@@ -4,7 +4,11 @@ import ssl
 import urllib.request
 from fastapi.responses import PlainTextResponse
 import threading
+from src.Services.driver import Driver
+from src.Models.initialize_model import InitializeVectorStore
 from src.utils.slack_utils import process_message
+from src.Services.api_caller import predict
+
 ssl._create_default_https_context = ssl._create_unverified_context
 app = FastAPI()
 driver = Driver()  # Initialize the Driver class to interact with the retriever and LLM
