@@ -6,7 +6,14 @@ from src.Services.RAG.retriever import BasicRetriever
 from src.Services.RAG.custom_llm import CustomOpenAIWrapper
 from langchain_core.documents import Document
 from src.Services.Chunker.parser import Parser
-
+import shutil
+import tempfile
+from pathlib import Path
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+from src.Services.api_caller import predict
+from utils.CONSTS import SLACK_KEY
+from src.Services.api_caller import predict
 
 class Driver:
     def __init__(self):
@@ -14,7 +21,7 @@ class Driver:
         self.llm = None
         self.parser = Parser()
 
-    
+
     def initailize_db(self, links : List[str], drive_link = None) -> None:
         links = [l for l in links if l != "string"]
         print(f"The links are \n{links}\n")
@@ -24,6 +31,17 @@ class Driver:
         self.retriever = retriever.get_retriever(splits)
         self.llm = CustomOpenAIWrapper()
 
+    def store_pdf(self, file):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_file_path = Path(temp_dir) / file.filename
+
+            # Write the uploaded file to the temporary directory
+            with temp_file_path.open("wb") as temp_file:
+                shutil.copyfileobj(file.file, temp_file)
+
+            # Return the temporary file path (or you can return a download link if serving the file)
+            print(str(temp_file_path))
+            return [str(temp_file_path)]
     def add_pdf_db(self, pdf_paths: List[str]) -> bool: #Manas
         # add logic of storing tmp files.
 

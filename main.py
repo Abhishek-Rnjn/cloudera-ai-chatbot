@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, Form, Request
+from fastapi import FastAPI, Response, Form, Request, UploadFile, File
 from threading import Thread
 import ssl
 import urllib.request
@@ -16,7 +16,6 @@ driver = Driver()  # Initialize the Driver class to interact with the retriever 
 
 @app.post("/ask")
 async def handle_slack_command(
-    request: Request,
     channel_id: str = Form(...),
     text: str = Form(...),
     user_id: str = Form(...),
@@ -50,8 +49,8 @@ def initialize_application(initialize_vector_store: InitializeVectorStore):
     return {"message": "Application initialized successfully"}
 
 
-@app.post("/v1/add_pdf_links")
-def upload_pdf(pdf_links: List[str]):
+@app.post("/v1/upload_file")
+def upload_pdf(file: UploadFile = File(...)):
     # Add the provided pdf links to the existing application
     # Implement the logic to add the pdf links to the application
     # driver.add_pdfs_to_df(pdf_links)
@@ -60,10 +59,11 @@ def upload_pdf(pdf_links: List[str]):
     # drive.add_pdf_to_db("tmp_files/abc.pdf")
 
     #1. Upload API
-    #2. SaveToDB(List documents)
-    driver.add_pdf_db(pdf_links)
 
-    return {"message": "PDF links added successfully"}
+
+
+    return driver.store_pdf(file)
+    # return {"message": "PDF links added successfully"}
 
 @app.post("/v1/add_web_pages")
 def add_web_pages(web_pages: List[str]):
@@ -72,7 +72,7 @@ def add_web_pages(web_pages: List[str]):
     return {"message": "Web pages added successfully"}
 
 @app.post("/v1/add_drive_links")
-def add_drive_links(drive_links: str):
+def add_drive_links(drive_id: str, folder_id: str):
     # to be implemented
     # admin api.
     return {"message": "Drive links added successfully"}
