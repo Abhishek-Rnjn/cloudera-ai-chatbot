@@ -1,9 +1,9 @@
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from src.Services.api_caller import predict
-from utils.CONSTS import SLACK_TOKEN, SLACK_SIGNING_SECRET
+from utils.CONSTS import SLACK_KEY
 slack_token = SLACK_TOKEN
-client = WebClient(token=SLACK_TOKEN)
+client = WebClient(token=SLACK_KEY)
 
 def process_message(channel_id: str, user_id: str, text: str):
     try:

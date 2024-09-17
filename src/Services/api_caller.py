@@ -27,17 +27,7 @@ def predict(message, history=None):
         messages=history_openai_format,
         stream=False,
     )
-    print(response)
-    print(type(response))
-
-    message_content = response.choices[0].message.content
-    print(message_content)
-    print("@######")
-    print(type(message_content))
-
-    return message_content
-    # return response
-
+    return response
 
 
 
