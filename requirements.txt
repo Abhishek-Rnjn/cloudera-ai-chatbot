@@ -4,3 +4,8 @@ openai==1.45.0
 langchain
 langchain-community==0.3.0
 chromadb
+llama-index-core
+llama-parse
+llama-index-readers-file
+python-dotenv
+llama-index-readers-google==0.4.0
