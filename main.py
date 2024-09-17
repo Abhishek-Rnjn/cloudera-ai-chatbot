@@ -8,6 +8,7 @@ from src.Services.driver import Driver
 from src.Models.initialize_model import InitializeVectorStore
 from src.utils.slack_utils import process_message
 from src.Services.api_caller import predict
+from typing import List
 
 ssl._create_default_https_context = ssl._create_unverified_context
 app = FastAPI()
@@ -47,6 +48,28 @@ def initialize_application(initialize_vector_store: InitializeVectorStore):
     # need to make this asynchronous and add a status check. @praneet/ @mihir
     driver.initailize_db(initialize_vector_store.pdf_links, initialize_vector_store.google_drive_link)
     return {"message": "Application initialized successfully"}
+
+
+@app.post("/v1/add_pdf_links")
+def add_pdf_links(pdf_links: List[str]):
+    # Add the provided pdf links to the existing application
+    # Implement the logic to add the pdf links to the application
+    # driver.add_pdfs_to_df(pdf_links)
+    # add upload pdf as well. Admin :- through API only.
+    return {"message": "PDF links added successfully"}
+
+@app.post("/v1/add_web_pages")
+def add_web_pages(web_pages: List[str]):
+    # to be implemented.
+    # admin api.
+    return {"message": "Web pages added successfully"}
+
+@app.post("/v1/add_drive_links")
+def add_drive_links(drive_links: str):
+    # to be implemented
+    # admin api.
+    return {"message": "Drive links added successfully"}
+
 
 @app.get("/v1/interact")
 def interact_with_model(input: str):

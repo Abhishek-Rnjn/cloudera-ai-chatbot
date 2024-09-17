@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI
 
 class BasicRetriever:
 
-    # this is problematic
+    # this is not problematic
     def web_doc_loader(self, links: List[str]) -> List[Document]:
         loader = WebBaseLoader(
         web_paths=(links),
@@ -23,6 +23,7 @@ class BasicRetriever:
         docs = loader.load()
         return docs
     
+    # Chunking
     def text_splitter(self, docs: List[Document]) -> List[Document]:
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=500)
         splits = text_splitter.split_documents(docs)
@@ -31,7 +32,7 @@ class BasicRetriever:
     def get_retriever(self, splits):
         vectorstore = Chroma.from_documents(documents=splits, 
                                     embedding=CAIIEmbeddings())
-
+        # vectorstore.aadd_documents()
         retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
         return retriever
     
