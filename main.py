@@ -1,11 +1,13 @@
 from typing import Union
 from fastapi import FastAPI
+from Services.Chunker.parserInterface import ParserInterface
 from Services.api_caller import predict
 app = FastAPI()
 
 
 @app.get("/")
 def health_check():
+    predict(input)
     return {"Health": "okay"}
 
 
