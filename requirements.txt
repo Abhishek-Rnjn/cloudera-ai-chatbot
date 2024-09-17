@@ -4,3 +4,17 @@ openai==1.45.0
 langchain
 langchain-community==0.3.0
 chromadb
+
+slack_sdk==3.33.0
+
+# Drive related
+google-api-core==2.10.0
+google-api-python-client==2.145.0
+google-auth==2.34.0
+google-auth-httplib2==0.2.0
+google-auth-oauthlib==1.2.1
+google-cloud-compute==1.5.2
+google-pasta==0.2.0
+googleapis-common-protos==1.56.4
+
+
