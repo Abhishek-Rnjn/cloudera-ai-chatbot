@@ -27,7 +27,7 @@ def predict(message, history=None):
     '''if history is None:
     
     ret = parser.parseSingleDoc()
-    return ret
+    return ret'''
     '''if history is None:
         history = dict()
     history_openai_format = []
