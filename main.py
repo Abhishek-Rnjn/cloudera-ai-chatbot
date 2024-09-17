@@ -16,7 +16,7 @@ async def handle_slack_command(
     text: str = Form(...),
     user_id: str = Form(...),
 ):
-    # process as slack need resp in 3 seconds
+    # process as need resp in 3 seconds
     response = PlainTextResponse(content="Processing ... ")
 
     # using thread......... to do things in background
