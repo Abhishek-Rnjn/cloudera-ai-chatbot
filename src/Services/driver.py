@@ -6,23 +6,29 @@ from src.Services.RAG.retriever import BasicRetriever
 from src.Services.RAG.custom_llm import CustomOpenAIWrapper
 from langchain_core.documents import Document
 from src.Services.Chunker.parser import Parser
+from src.Services.RAG.CONSTS import DEFAULT_FILE
 
+retriever = BasicRetriever()
 
 class Driver:
     def __init__(self):
         self.retriever =None
-        self.llm = None
+        self.llm = CustomOpenAIWrapper()
         self.parser = Parser()
+        self.__initialized = False
 
     
     def initailize_db(self, links : List[str], drive_link = None) -> None:
+        if self.__initialized is True:
+            raise Exception("Driver is already initialized, Please upload new docs using the upload APIs")
         links = [l for l in links if l != "string"]
+        if len(links) == 0:
+            links = [DEFAULT_FILE]
         print(f"The links are \n{links}\n")
-        retriever = BasicRetriever()
         docs = retriever.web_doc_loader(links)
         splits = retriever.text_splitter(docs)
-        self.retriever = retriever.get_retriever(splits)
-        self.llm = CustomOpenAIWrapper()
+        self.retriever = retriever.get_retriever(splits, True)
+        self.__initialized = True
 
     def add_pdf_db(self, pdf_paths: List[str]) -> bool: #Manas
         # add logic of storing tmp files.
@@ -45,7 +51,7 @@ class Driver:
 
         Question: {question}
         """
-
+        self.retriever = retriever.fetch_latest_retriever()
         prompt = ChatPromptTemplate.from_template(template)
         print(f"The prompt template is {prompt}")
         chain = {"context": self.retriever, "question": RunnablePassthrough()} | prompt | self.llm | StrOutputParser()
