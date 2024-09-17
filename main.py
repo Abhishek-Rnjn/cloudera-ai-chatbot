@@ -51,11 +51,18 @@ def initialize_application(initialize_vector_store: InitializeVectorStore):
 
 
 @app.post("/v1/add_pdf_links")
-def add_pdf_links(pdf_links: List[str]):
+def upload_pdf(pdf_links: List[str]):
     # Add the provided pdf links to the existing application
     # Implement the logic to add the pdf links to the application
     # driver.add_pdfs_to_df(pdf_links)
     # add upload pdf as well. Admin :- through API only.
+    # bytes uploaded, save pdf to tmp_files/abc.pdf.
+    # drive.add_pdf_to_db("tmp_files/abc.pdf")
+
+    #1. Upload API
+    #2. SaveToDB(List documents)
+    driver.add_pdf_db(pdf_links)
+
     return {"message": "PDF links added successfully"}
 
 @app.post("/v1/add_web_pages")

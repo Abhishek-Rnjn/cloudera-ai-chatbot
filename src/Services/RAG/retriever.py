@@ -36,6 +36,11 @@ class BasicRetriever:
         retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
         return retriever
     
+    def add_docs_embeddings_to_db(self, docs: List[Document]) -> bool:
+        # implement
+        return True
+
+    
 
 if __name__ == "__main__":
     retriever = BasicRetriever()
