@@ -1,6 +1,9 @@
 from openai import OpenAI
 from Services.Chunker.parserInterface import ParserInterface
+from Services.Chunker.parserInterface import ParserInterface
 import httpx
+
+
 
 
 
@@ -15,8 +18,13 @@ client = OpenAI(
     http_client=http_client,
 )
 parser = ParserInterface()
+parser = ParserInterface()
 
 def predict(message, history=None):
+    
+    ret = parser.parseSingleDoc()
+    return ret
+    '''if history is None:
     
     ret = parser.parseSingleDoc()
     return ret
