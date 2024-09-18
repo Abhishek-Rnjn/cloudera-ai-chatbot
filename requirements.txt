@@ -18,5 +18,5 @@ google-pasta==0.2.0
 googleapis-common-protos==1.56.4
 pypdf
 python-multipart
-
+pysqlite3-binary
 

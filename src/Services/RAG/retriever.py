@@ -8,6 +8,10 @@ from src.Services.RAG.CONSTS import PERSIST_DIRECTORY, IDS_PATH
 import uuid
 import pickle
 import os
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 
 
 class BasicRetriever:
