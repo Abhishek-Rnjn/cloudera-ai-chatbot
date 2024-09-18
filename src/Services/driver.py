@@ -57,7 +57,7 @@ class Driver:
             return self.parse_Pdf(temp_file_paths)
 
     def store_drive_files(self, files: List[str]) -> List[str]:
-        self.parser.load_files_from_drive(files)
+        return self.parser.load_files_from_drive(files)
 
     def parse_Pdf(self, pdf_paths: List[str]) -> bool:  #Manas
         # add logic of storing tmp files.

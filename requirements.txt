@@ -6,7 +6,7 @@ langchain-community==0.3.0
 chromadb
 
 slack_sdk==3.33.0
-
+beautifulsoup4
 # Drive related
 google-api-core==2.10.0
 google-api-python-client==2.145.0

@@ -30,7 +30,7 @@ class BasicRetriever:
 
     # Chunking
     def text_splitter(self, docs: List[Document]) -> List[Document]:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=200)
         splits = text_splitter.split_documents(docs)
         return splits
 

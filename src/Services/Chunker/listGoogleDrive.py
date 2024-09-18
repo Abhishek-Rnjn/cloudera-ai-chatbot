@@ -93,7 +93,7 @@ def create_documents() -> List[Document]:
     """
     service = get_gdrive_service()
     shared_drive_id = '0ADGBOd2_kNY6Uk9PVA'
-    folder_id = "1R0PkN4FUqLhbPiyqxg6uTrhR3Dux_EGs"
+    folder_id = "1TVk20tKd3ob0TH-Qz2ox352M4lfJUFpQ"
     query = f"'{folder_id}' in parents"
     # folder_metadata = service.files().get(fileId=folder_id, fields='id, name').execute()
     # print("metadat:", folder_metadata)
