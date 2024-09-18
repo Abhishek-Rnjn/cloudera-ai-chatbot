@@ -1,7 +1,7 @@
 from langchain_core.documents import Document
 from typing import List
 from src.Services.RAG.retriever import BasicRetriever
-from listGoogleDrive import create_documents
+from src.Services.Chunker.listGoogleDrive import create_documents
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.document_loaders import WebBaseLoader
 
@@ -14,7 +14,7 @@ class Parser:
         pages = []
         for file_path in filenames:
             loader = PyPDFLoader(file_path)
-            pages.append(loader.load_and_split())
+            pages.extend(loader.load_and_split())
         return self.db.add_docs_embeddings_to_db(docs=pages)
     
     def load_files_from_drive(self, filename: List[str]) -> bool:

@@ -84,7 +84,11 @@ class BasicRetriever:
         return self.retriever
     
     def add_docs_embeddings_to_db(self, docs: List[Document]) -> bool:
+        print("The type of document passed to this function is:- ")
+        for doc in docs:
+            print(type(doc))
         try:
+            docs = self.text_splitter(docs)
             ids = [str(uuid.uuid5(uuid.NAMESPACE_DNS, doc.page_content)) for doc in docs]
             unique_ids = list(set(ids))
             seen_ids = self.get_seen_ids()
