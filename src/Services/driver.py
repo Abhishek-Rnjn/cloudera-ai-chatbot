@@ -68,7 +68,7 @@ class Driver:
         return self.parser.load_files_from_web(web_paths)
 
     def render(self, question):
-        template = """Answer the question based only on the following context:
+        template = """Answer the question based on the following context. If the answer is not present in context, generate from your own but mention that it was not in the context.:
         {context}
 
         Question: {question}
