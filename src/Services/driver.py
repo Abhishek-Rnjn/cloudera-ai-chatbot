@@ -3,6 +3,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from typing import List
 from src.Services.RAG.retriever import BasicRetriever
+from src.Services.RAG.advance_rag import AdvancedRag
 from src.Services.RAG.custom_llm import CustomOpenAIWrapper
 from langchain_core.documents import Document
 from src.Services.Chunker.parser import Parser
@@ -18,6 +19,7 @@ from src.Services.RAG.CONSTS import DEFAULT_FILE
 import datetime
 
 retriever = BasicRetriever()
+advanced_rag = AdvancedRag()
 
 
 class Driver:
@@ -81,6 +83,14 @@ class Driver:
         out = chain.invoke(question)
         print(f"out is \n{out}\n")
         return out
+    
+    def render_advance(self, question):
+        output = advanced_rag.get_result(question)
+        print(f"Output is \n{output}\n")
+        return output
+
+
+
 
 
 if __name__ == "__main__":

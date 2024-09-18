@@ -14,7 +14,9 @@ class CAIIEmbeddings(Embeddings):
         }
 
     def get_embeddings(self, sentences):
+        sentences = [s for s in sentences if s != '']
         print(f"The length of sentences is {len(sentences)}")
+        print(f"THe sentences are {sentences}")
         if len(sentences) == 0:
             return []
         payload = json.dumps({
@@ -23,6 +25,8 @@ class CAIIEmbeddings(Embeddings):
             "input_type": "query"
         })
         response = requests.request("POST", self.url, headers=self.headers, data=payload, verify=False)
+        print(response)
+        print(response.text)
         data = response.json()['data']
         all_embeddings = [0] * len(sentences)
         for embedding in data:

@@ -80,7 +80,7 @@ def add_drive_links(drive_id: str, folders: List[str]):
 
 @app.get("/v1/interact")
 def interact_with_model(input: str):
-    return driver.render(input)
+    return driver.render_advance(input)
 
 
 @app.get("/chat")
