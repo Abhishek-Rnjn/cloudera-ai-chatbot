@@ -6,7 +6,6 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.output_parsers import StrOutputParser
 from typing import List
 import bs4
-from langchain_openai import ChatOpenAI
 from src.Services.RAG.CONSTS import PERSIST_DIRECTORY, IDS_PATH
 import uuid
 import pickle
