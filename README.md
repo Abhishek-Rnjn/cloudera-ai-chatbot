@@ -1,4 +1,4 @@
-# Cloudera Intelligent Assistant (CIA) Slack Chat Bot
+# Cloudera Intelligent Assistant (CIA) Chat Bot
 
 The **Cloudera Intelligent Assistant (CIA)** is a Slack-integrated chatbot designed to streamline data collection, facilitate intelligent conversations, and interact with external sources like web links, file uploads, and Google Drive. This tool allows users to perform functions like collecting documents, interacting with users via Slack commands, and providing intelligent responses from a model based on user inputs.
 
