@@ -17,9 +17,9 @@ class Parser:
             pages.extend(loader.load_and_split())
         return self.db.add_docs_embeddings_to_db(docs=pages)
 
-    def load_files_from_drive(self, filename: List[str]) -> bool:
+    def load_files_from_drive(self, folder_ids: List[str]) -> bool:
         #a = Document(page_content= "abc", metadata ={"name": filename})
-        docs = create_documents()
+        docs = create_documents(folder_ids=folder_ids)
         return self.db.add_docs_embeddings_to_db(docs=docs)
 
     def load_files_from_web(self, links: List[str]) -> bool:
