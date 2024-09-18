@@ -87,35 +87,18 @@ def list_files(items):
     # print(table)
 
 
-def create_documents() -> List[Document]:
+def create_documents(folder_ids: List[str]) -> List[Document]:
     """Shows basic usage of the Drive v3 API.
     Prints the names and ids of the first 5 files the user has access to.
     """
     service = get_gdrive_service()
     shared_drive_id = '0ADGBOd2_kNY6Uk9PVA'
-    folder_id = "1TVk20tKd3ob0TH-Qz2ox352M4lfJUFpQ"
-    query = f"'{folder_id}' in parents"
-    # folder_metadata = service.files().get(fileId=folder_id, fields='id, name').execute()
-    # print("metadat:", folder_metadata)
-    # Call the Drive v3 API
-    results = service.files().list(
-        q=query,
-        spaces='drive',
-        corpora='drive',
-        driveId=shared_drive_id,
-        includeItemsFromAllDrives=True,
-        supportsAllDrives=True,
-        pageSize=100,
-        fields="nextPageToken, files(id, name, mimeType, size, parents, modifiedTime)"
-    ).execute()
-    # get the results
     all_items = []
-    items = results.get('files', [])
-    while items:
-        all_items.extend(items)
-        next_page_token = results.get('nextPageToken')
-        if not next_page_token:
-            break
+    for folder_id in folder_ids:
+        query = f"'{folder_id}' in parents"
+        # folder_metadata = service.files().get(fileId=folder_id, fields='id, name').execute()
+        # print("metadat:", folder_metadata)
+        # Call the Drive v3 API
         results = service.files().list(
             q=query,
             spaces='drive',
@@ -123,11 +106,28 @@ def create_documents() -> List[Document]:
             driveId=shared_drive_id,
             includeItemsFromAllDrives=True,
             supportsAllDrives=True,
-            pageSize=50,
-            fields="nextPageToken, files(id, name, mimeType, size, parents, modifiedTime)",
-            pageToken=next_page_token
+            pageSize=100,
+            fields="nextPageToken, files(id, name, mimeType, size, parents, modifiedTime)"
         ).execute()
+        # get the results
         items = results.get('files', [])
+        while items:
+            all_items.extend(items)
+            next_page_token = results.get('nextPageToken')
+            if not next_page_token:
+                break
+            results = service.files().list(
+                q=query,
+                spaces='drive',
+                corpora='drive',
+                driveId=shared_drive_id,
+                includeItemsFromAllDrives=True,
+                supportsAllDrives=True,
+                pageSize=50,
+                fields="nextPageToken, files(id, name, mimeType, size, parents, modifiedTime)",
+                pageToken=next_page_token
+            ).execute()
+            items = results.get('files', [])
     #list_files(all_items)
     docs = []
     for item in all_items:
@@ -147,6 +147,3 @@ def create_documents() -> List[Document]:
         docs.append(doc)
     return docs
 
-
-if __name__ == '__main__':
-    create_documents()
