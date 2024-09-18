@@ -134,7 +134,7 @@ def create_documents() -> List[Document]:
         #fileId="1yRpks3-0xJ42fYlr1NJXcM6U2iIPNLg429qVXldzTjY",
         mime_type = item.get("mimeType", "N/A")
         #TODO:Ignore Folders for now
-        if mime_type == 'application/vnd.google-apps.folder':
+        if mime_type != 'application/vnd.google-apps.document':
             continue
         id = item.get("id", "N/A")
         file_content = service.files().export(
