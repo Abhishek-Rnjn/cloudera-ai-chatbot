@@ -8,6 +8,7 @@ from src.Services.RAG.CONSTS import PERSIST_DIRECTORY, IDS_PATH
 import uuid
 import pickle
 import os
+import re
 
 
 class BasicRetriever:
@@ -28,9 +29,19 @@ class BasicRetriever:
         docs = loader.load()
         return docs
 
+    @staticmethod
+    def preprocess(text):
+        text = text.strip().lower()
+        text = re.sub("\s+"," ",text)
+        # remove multi new lines \n to one \n using re
+        text = re.sub("\n+", "\n", text)
+        return text
+
     # Chunking
     def text_splitter(self, docs: List[Document]) -> List[Document]:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=200)
+        for d in docs:
+            d.page_content = self.preprocess(d.page_content)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=100)
         splits = text_splitter.split_documents(docs)
         return splits
 
@@ -49,7 +60,7 @@ class BasicRetriever:
     def fetch_latest_retriever(self):
         if self.retriever is None:
             vectorstore = Chroma(embedding_function=CAIIEmbeddings(), persist_directory=PERSIST_DIRECTORY)
-            self.retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+            self.retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
         return self.retriever
 
     def get_retriever(self, docs, initialization: bool = False):
@@ -76,7 +87,7 @@ class BasicRetriever:
         else:
             vectorstore = Chroma(embedding_function=CAIIEmbeddings(), persist_directory=PERSIST_DIRECTORY)
         # vectorstore.aadd_documents()
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
         self.retriever = retriever
         return self.retriever
 
@@ -101,7 +112,7 @@ class BasicRetriever:
             with open(os.path.join(os.getcwd(), IDS_PATH), "wb") as f:
                 pickle.dump(seen_ids, f)
                 print("Saved seen ids")
-            self.retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+            self.retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
             return True
         except Exception as e:
             print(f"Error while adding docs to db: {e}")
