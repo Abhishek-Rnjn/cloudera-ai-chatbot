@@ -2,6 +2,8 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from src.Services.api_caller import predict
 from utils.CONSTS import SLACK_KEY
+from src.Services.driver import Driver
+driver=Driver()
 slack_token = SLACK_KEY
 client = WebClient(token=SLACK_KEY)
 
@@ -12,7 +14,7 @@ def process_message(channel_id: str, user_id: str, text: str):
             user=user_id,
             text=f"*`Question`*: {text}"
         )
-        response = predict(text)
+        response = driver.render(text)
         print(response)
 
         message_content = response.choices[0].message.content

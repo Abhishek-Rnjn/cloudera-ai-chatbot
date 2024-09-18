@@ -1,4 +1,3 @@
-from sentence_transformers import SentenceTransformer
 from langchain_core.embeddings import Embeddings
 from typing import List
 import requests
@@ -23,17 +22,16 @@ class CAIIEmbeddings(Embeddings):
             "input_type": "query"
             })
         response = requests.request("POST", self.url, headers=self.headers, data=payload, verify=False)
-        print(response.json())
         data = response.json()['data']
         all_embeddings = [0] * len(sentences)
         for embedding in data:
             all_embeddings[embedding['index']] = embedding['embedding']
         print(f"The total embeddings are {len(all_embeddings)}")
-        return all_embeddings 
+        return all_embeddings
 
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         return self.get_embeddings(texts)
-    
+
     def embed_query(self, query: str) -> List[float]:
         return self.get_embeddings([query])[0]
 
