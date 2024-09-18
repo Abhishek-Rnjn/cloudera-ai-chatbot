@@ -16,7 +16,7 @@ class Parser:
             loader = PyPDFLoader(file_path)
             pages.extend(loader.load_and_split())
         return self.db.add_docs_embeddings_to_db(docs=pages)
-    
+
     def load_files_from_drive(self, filename: List[str]) -> bool:
         #a = Document(page_content= "abc", metadata ={"name": filename})
         docs = create_documents()
@@ -24,9 +24,10 @@ class Parser:
 
     def load_files_from_web(self, links: List[str]) -> bool:
         loader = WebBaseLoader(
-        web_paths=(links))
+            web_paths=(links))
         docs = loader.load()
         return self.db.add_docs_embeddings_to_db(docs=docs)
+
 
 if __name__ == '__main__':
     #Parser().load_files_from_web(['https://docs.cloudera.com/machine-learning/cloud/product/topics/ml-product-overview.html'])
