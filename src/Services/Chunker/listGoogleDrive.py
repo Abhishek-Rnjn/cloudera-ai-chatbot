@@ -6,6 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.http import MediaIoBaseDownload
 from langchain_core.documents import Document
+from typing import List
 #from tabulate import tabulate
 
 # If modifying these scopes, delete the file token.pickle.
@@ -81,7 +82,7 @@ def list_files(items):
     #table = tabulate(rows, headers=["ID", "Name", "Parents", "Size", "Type", "Modified Time"])
     # print(table)
 
-def create_documents():
+def create_documents() -> List[Document]:
     """Shows basic usage of the Drive v3 API.
     Prints the names and ids of the first 5 files the user has access to.
     """

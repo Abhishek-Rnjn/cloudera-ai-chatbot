@@ -61,9 +61,6 @@ def upload_pdf(file: UploadFile = File(...)):
     # drive.add_pdf_to_db("tmp_files/abc.pdf")
 
     #1. Upload API
-
-
-
     return driver.store_pdf(file)
     # return {"message": "PDF links added successfully"}
 
@@ -71,21 +68,17 @@ def upload_pdf(file: UploadFile = File(...)):
 def add_web_pages(web_pages: List[str]):
     # to be implemented.
     # admin api.
-    return {"message": "Web pages added successfully"}
+    return driver.parse_web_pages(web_pages)
 
 @app.post("/v1/add_drive_links")
-def add_drive_links(drive_id: str, folder_id: str):
-    # to be implemented
-    # admin api.
-    return {"message": "Drive links added successfully"}
-
+def add_drive_links(drive_id: str, folders: List[str]):
+        return driver.store_drive_files(folders)
 
 @app.get("/v1/interact")
 def interact_with_model(input: str):
     # Interact with the initialized model using the provided input
     # Implement the logic to interact with the model and return the response
     return driver.render(input)
-
 
 @app.get("/chat")
 def chat_with_model(input: str):

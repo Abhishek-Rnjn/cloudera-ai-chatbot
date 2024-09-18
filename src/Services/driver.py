@@ -15,6 +15,7 @@ from src.Services.api_caller import predict
 from utils.CONSTS import SLACK_KEY
 from src.Services.api_caller import predict
 from src.Services.RAG.CONSTS import DEFAULT_FILE
+import datetime
 
 retriever = BasicRetriever()
 
@@ -38,31 +39,33 @@ class Driver:
         self.retriever = retriever.get_retriever(splits, True)
         self.__initialized = True
 
-    def store_pdf(self, file):
+    def store_pdf(self, files : List[str]) -> bool:
         with tempfile.TemporaryDirectory() as temp_dir:
-            temp_file_path = Path(temp_dir) / file.filename
+            temp_file_paths = []
+            for file in files:
+                time = str(datetime.datetime.now().timestamp()).replace(" ", "")
+                uniqueSuffix =  file.filename + time
+                temp_file_path = Path(temp_dir) / uniqueSuffix
 
-            # Write the uploaded file to the temporary directory
-            with temp_file_path.open("wb") as temp_file:
-                shutil.copyfileobj(file.file, temp_file)
+                # Write the uploaded file to the temporary directory
+                with temp_file_path.open("wb") as temp_file:
+                    shutil.copyfileobj(file.file, temp_file)
 
-            # Return the temporary file path (or you can return a download link if serving the file)
-            print(str(temp_file_path))
-            return [str(temp_file_path)]
-    def add_pdf_db(self, pdf_paths: List[str]) -> bool: #Manas
+                # Return the temporary file path (or you can return a download link if serving the file)
+                print(str(temp_file_path))
+                temp_file_paths.append(str(temp_file_path))
+            return self.parse_Pdf(temp_file_paths)
+
+    def store_drive_files(self, files : List[str]) -> List[str]:
+        self.parser.load_files_from_drive(files)
+
+    def parse_Pdf(self, pdf_paths: List[str]) -> bool: #Manas
         # add logic of storing tmp files.
-
-        list_docs = self.parser.load_local_file(pdf_paths)
-        self.add_docs_to_db(list_docs)
-        return True
+        return self.parser.load_local_file(pdf_paths)
         
-
-
-    def add_docs_to_db(self, docs: List[Document]):  #abhishek
-        # self.retriever.add_documents(List[Document])
-        pass
-
-
+    def parse_web_pages(self, web_paths: List[str]) -> bool: #Manas
+        # add logic of storing tmp files.
+        return self.parser.load_files_from_web(web_paths)
 
     def render(self, question):
         template = """Answer the question based only on the following context:
