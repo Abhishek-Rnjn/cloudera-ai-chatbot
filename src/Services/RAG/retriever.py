@@ -3,14 +3,12 @@ from langchain_core.documents import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
-from langchain_core.output_parsers import StrOutputParser
 from typing import List
-import bs4
-from langchain_openai import ChatOpenAI
 from src.Services.RAG.CONSTS import PERSIST_DIRECTORY, IDS_PATH
 import uuid
 import pickle
 import os
+
 
 class BasicRetriever:
 
@@ -20,22 +18,22 @@ class BasicRetriever:
     # this is not problematic
     def web_doc_loader(self, links: List[str]) -> List[Document]:
         loader = WebBaseLoader(
-        web_paths=(links),
-        # bs_kwargs=dict(
-        #     parse_only=bs4.SoupStrainer(
-        #         class_=("post-content", "post-title", "post-header")
-        #     )
-        # ),
-    )
+            web_paths=(links),
+            # bs_kwargs=dict(
+            #     parse_only=bs4.SoupStrainer(
+            #         class_=("post-content", "post-title", "post-header")
+            #     )
+            # ),
+        )
         docs = loader.load()
         return docs
-    
+
     # Chunking
     def text_splitter(self, docs: List[Document]) -> List[Document]:
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         splits = text_splitter.split_documents(docs)
-        return splits 
-    
+        return splits
+
     def get_seen_ids(self):
         absolute_path = os.path.join(os.getcwd(), IDS_PATH)
         print(f"Absolute path: {absolute_path}")
@@ -47,13 +45,12 @@ class BasicRetriever:
             print("No seen Ids")
             seen_ids = set()
         return seen_ids
-    
+
     def fetch_latest_retriever(self):
         if self.retriever is None:
             vectorstore = Chroma(embedding_function=CAIIEmbeddings(), persist_directory=PERSIST_DIRECTORY)
             self.retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
         return self.retriever
-
 
     def get_retriever(self, docs, initialization: bool = False):
         if initialization:
@@ -66,9 +63,9 @@ class BasicRetriever:
             if len(unique_docs) == 0:
                 vectorstore = Chroma(embedding_function=CAIIEmbeddings(), persist_directory=PERSIST_DIRECTORY)
             else:
-                vectorstore = Chroma.from_documents(unique_docs,ids= unique_ids,
-                                            embedding=CAIIEmbeddings(),
-                                            persist_directory=PERSIST_DIRECTORY)
+                vectorstore = Chroma.from_documents(unique_docs, ids=unique_ids,
+                                                    embedding=CAIIEmbeddings(),
+                                                    persist_directory=PERSIST_DIRECTORY)
                 print("Persisting DB.")
                 vectorstore.persist()
             # save the new seen ids
@@ -82,7 +79,7 @@ class BasicRetriever:
         retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
         self.retriever = retriever
         return self.retriever
-    
+
     def add_docs_embeddings_to_db(self, docs: List[Document]) -> bool:
         print("The type of document passed to this function is:- ")
         for doc in docs:
@@ -97,7 +94,7 @@ class BasicRetriever:
                 print("No unique documents found.")
                 return True
             vectorstore = Chroma(embedding_function=CAIIEmbeddings(), persist_directory=PERSIST_DIRECTORY)
-            ids = vectorstore.add_documents(unique_docs, ids= unique_ids)
+            ids = vectorstore.add_documents(unique_docs, ids=unique_ids)
             print(f"added in the vector store db with total ids {len(ids)}")
             vectorstore.persist()
             print("Persisted the db")
@@ -110,7 +107,6 @@ class BasicRetriever:
             print(f"Error while adding docs to db: {e}")
             return False
 
-    
 
 if __name__ == "__main__":
     retriever = BasicRetriever()
@@ -120,4 +116,3 @@ if __name__ == "__main__":
     #retriever = retriever.get_retriever(splits)
     #docs = retriever.get_relevant_documents("What is Task Decomposition?")
     print(docs)
-

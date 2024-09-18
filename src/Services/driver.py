@@ -19,15 +19,15 @@ import datetime
 
 retriever = BasicRetriever()
 
+
 class Driver:
     def __init__(self):
-        self.retriever =None
+        self.retriever = None
         self.llm = CustomOpenAIWrapper()
         self.parser = Parser()
         self.__initialized = False
 
-
-    def initailize_db(self, links : List[str], drive_link = None) -> None:
+    def initailize_db(self, links: List[str], drive_link=None) -> None:
         if self.__initialized is True:
             raise Exception("Driver is already initialized, Please upload new docs using the upload APIs")
         links = [l for l in links if l != "string"]
@@ -39,12 +39,12 @@ class Driver:
         self.retriever = retriever.get_retriever(splits, True)
         self.__initialized = True
 
-    def store_pdf(self, files : List[str]) -> bool:
+    def store_pdf(self, files: List[str]) -> bool:
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_file_paths = []
             for file in files:
                 time = str(datetime.datetime.now().timestamp()).replace(" ", "")
-                uniqueSuffix =  file.filename + time
+                uniqueSuffix = file.filename + time
                 temp_file_path = Path(temp_dir) / uniqueSuffix
 
                 # Write the uploaded file to the temporary directory
@@ -56,14 +56,14 @@ class Driver:
                 temp_file_paths.append(str(temp_file_path))
             return self.parse_Pdf(temp_file_paths)
 
-    def store_drive_files(self, files : List[str]) -> List[str]:
+    def store_drive_files(self, files: List[str]) -> List[str]:
         self.parser.load_files_from_drive(files)
 
-    def parse_Pdf(self, pdf_paths: List[str]) -> bool: #Manas
+    def parse_Pdf(self, pdf_paths: List[str]) -> bool:  #Manas
         # add logic of storing tmp files.
         return self.parser.load_local_file(pdf_paths)
-        
-    def parse_web_pages(self, web_paths: List[str]) -> bool: #Manas
+
+    def parse_web_pages(self, web_paths: List[str]) -> bool:  #Manas
         # add logic of storing tmp files.
         return self.parser.load_files_from_web(web_paths)
 

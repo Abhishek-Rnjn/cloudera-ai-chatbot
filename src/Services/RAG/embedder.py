@@ -4,12 +4,13 @@ import requests
 import json
 from src.Services.RAG.CONSTS import EMBEDDING_ENDPOINT, OPENAI_API_KEY
 
+
 class CAIIEmbeddings(Embeddings):
     def __init__(self):
         self.url = EMBEDDING_ENDPOINT
         self.headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {OPENAI_API_KEY}'
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {OPENAI_API_KEY}'
         }
 
     def get_embeddings(self, sentences):
@@ -20,7 +21,7 @@ class CAIIEmbeddings(Embeddings):
             "input": sentences,
             "model": "snowflake/arctic-embed-l",
             "input_type": "query"
-            })
+        })
         response = requests.request("POST", self.url, headers=self.headers, data=payload, verify=False)
         data = response.json()['data']
         all_embeddings = [0] * len(sentences)
@@ -39,4 +40,3 @@ class CAIIEmbeddings(Embeddings):
 if __name__ == "__main__":
     a = CAIIEmbeddings()
     print(a.embed_query("test"))
-

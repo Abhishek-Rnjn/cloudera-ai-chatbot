@@ -7,10 +7,12 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaIoBaseDownload
 from langchain_core.documents import Document
 from typing import List
+
 #from tabulate import tabulate
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/drive.file']
+
 
 def get_gdrive_service():
     creds = None
@@ -34,6 +36,7 @@ def get_gdrive_service():
     # return Google Drive API service
     return build('drive', 'v3', credentials=creds)
 
+
 def get_size_format(b, factor=1024, suffix="B"):
     """
     Scale bytes to its proper byte format
@@ -42,23 +45,24 @@ def get_size_format(b, factor=1024, suffix="B"):
         1253656678 => '1.17 GB'
     """
     units = ["", "KB", "MB", "GB", "TB"]
-    
+
     if b == 0:
         return f"0{suffix}"
-    
+
     unit_index = 0
     while b >= factor and unit_index < len(units) - 1:
         b /= factor
         unit_index += 1
-    
+
     return f"{b:.2f} {units[unit_index]}"
+
 
 def list_files(items):
     """Given items returned by Google Drive API, prints them in a tabular way."""
     if not items:
         print('No files found.')
         return
-    
+
     rows = []
     for item in items:
         # print(item)
@@ -66,21 +70,22 @@ def list_files(items):
         name = item.get("name", "N/A")
         parents = ", ".join(item.get("parents", ["N/A"]))
         size = "N/A"
-        
+
         if "size" in item:
             try:
                 size = get_size_format(int(item["size"]))
             except ValueError:
                 size = "N/A"
-        
+
         mime_type = item.get("mimeType", "N/A")
         modified_time = item.get("modifiedTime", "N/A")
-        
+
         rows.append((id, name, parents, size, mime_type, modified_time))
-    
+
     print("Files:")
     #table = tabulate(rows, headers=["ID", "Name", "Parents", "Size", "Type", "Modified Time"])
     # print(table)
+
 
 def create_documents() -> List[Document]:
     """Shows basic usage of the Drive v3 API.
@@ -94,13 +99,13 @@ def create_documents() -> List[Document]:
     # print("metadat:", folder_metadata)
     # Call the Drive v3 API
     results = service.files().list(
-        q=query, 
+        q=query,
         spaces='drive',
         corpora='drive',
         driveId=shared_drive_id,
         includeItemsFromAllDrives=True,
         supportsAllDrives=True,
-        pageSize=100, 
+        pageSize=100,
         fields="nextPageToken, files(id, name, mimeType, size, parents, modifiedTime)"
     ).execute()
     # get the results
@@ -141,6 +146,7 @@ def create_documents() -> List[Document]:
         print(doc.page_content)
         docs.append(doc)
     return docs
+
 
 if __name__ == '__main__':
     create_documents()
