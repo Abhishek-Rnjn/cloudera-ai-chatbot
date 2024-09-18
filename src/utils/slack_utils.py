@@ -14,15 +14,12 @@ def process_message(channel_id: str, user_id: str, text: str):
             user=user_id,
             text=f"*`Question`*: {text}"
         )
-        response = driver.render(text)
-        print(response)
-
-        message_content = response.choices[0].message.content
-        print(message_content)
+        msg_response = driver.render(text)
+        print(msg_response)
         client.chat_postEphemeral(
             channel=channel_id,
             user=user_id,
-            text=message_content
+            text=msg_response
         )
     except SlackApiError as e:
         print(f"Error posting message: {e.response['error']}")
